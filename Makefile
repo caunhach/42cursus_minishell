@@ -15,13 +15,19 @@ NAME = minishell
 SRCS = src/executor/error.c \
        src/executor/exec_cmd.c \
 	   src/executor/exec_main.c \
+	   src/executor/exec_single_main.c \
 	   src/executor/main.c \
 	   src/executor/utils.c \
 	   src/executor/parse_env.c \
 	   src/executor/utils_env.c \
 	   src/builtin/builtin.c \
+	   src/builtin/ft_cd.c \
 	   src/builtin/ft_echo.c \
-	   src/builtin/ft_pwd.c
+	   src/builtin/ft_env.c \
+	   src/builtin/ft_export.c \
+	   src/builtin/ft_pwd.c \
+	   src/builtin/builtin_utils.c \
+	   src/expander/expander_utils.c
 
 OBJS = $(SRCS:.c=.o)
 

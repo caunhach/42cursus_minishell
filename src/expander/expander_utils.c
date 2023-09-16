@@ -1,52 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_echo.c                                          :+:      :+:    :+:   */
+/*   expander_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: caunhach <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/09/13 20:49:41 by caunhach          #+#    #+#             */
-/*   Updated: 2023/09/13 20:49:44 by caunhach         ###   ########.fr       */
+/*   Created: 2023/09/16 15:11:21 by caunhach          #+#    #+#             */
+/*   Updated: 2023/09/16 15:11:24 by caunhach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/execution.h"
 
-static int	count_cmds(char **cmds)
+char	*delete_quotes(char *str, char c)
 {
 	int	i;
+	int	j;
 
 	i = 0;
-	while (cmds[i])
-		i++;
-	return (i);
-}
-
-int	ft_echo(t_cmds *ls_cmds)
-{
-	int		i;
-	int		option;
-	char	**cmds;
-
-	i = 1;
-	option = 0;
-	cmds = ls_cmds->cmds;
-	if (count_cmds(cmds) > 1)
+	j = 0;
+	while (str[i])
 	{
-		if (!ft_strncmp(cmds[i], "-n", 2))
+		if (str[i] == c)
 		{
-			option = 1;
-			i++;
+			j = 0;
+			while (str[i + j] == c)
+				j++;
+			ft_strlcpy(&str[i], &str[i + j], ft_strlen(str) - i);
 		}
-		while (cmds[i])
-		{
-			ft_putstr_fd(cmds[i], 1);
-			if (cmds[i][0] != '\0' && cmds[i + 1])
-				write(1, " ", 1);
-			i++;
-		}
+		i++;
 	}
-	if (!option)
-		write(1, "\n", 1);
-	return (0);
+	return (str);
 }

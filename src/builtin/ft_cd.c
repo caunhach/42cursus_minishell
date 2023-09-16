@@ -12,108 +12,103 @@
 
 #include "../../inc/execution.h"
 
-// static void		print_error(char **args)
-// {
-// 	ft_putstr_fd("cd: ", 2);
-// 	if (args[2])
-// 		ft_putstr_fd("string not in pwd: ", 2);
-// 	else
-// 	{
-// 		ft_putstr_fd(strerror(errno), 2);
-// 		ft_putstr_fd(": ", 2);
-// 	}
-// 	ft_putendl_fd(args[1], 2);
-// }
+char	*get_env_var(t_envs *ls_envs, char *var)
+{
+	char	**envs;
+	char	*ret;
+	int		i;
+	int		len;
 
-// static char		*get_env_path(t_env *env, const char *var, size_t len)
-// {
-// 	char	*oldpwd;
-// 	int		i;
-// 	int		j;
-// 	int		s_alloc;
+	i = -1;
+	envs = ls_envs->envs;
+	len = ft_strlen(var);
+	while (envs[++i])
+	{
+		if (!ft_strncmp(envs[i], var, len))
+		{
+			ret = ft_substr(envs[i], len, ft_strlen(envs[i]) - len);
+			if (!ret)
+			{
+				ft_putstr_fd("Failed to get env var :",
+					STDERR_FILENO);
+				ft_error(var);
+			}
+			return (ret);
+		}
+	}
+	return (NULL);
+}
 
-// 	while (env && env->next != NULL)
-// 	{
-// 		if (ft_strncmp(env->value, var, len) == 0)
-// 		{
-// 			s_alloc = ft_strlen(env->value) - len;
-// 			if (!(oldpwd = malloc(sizeof(char) * s_alloc + 1)))
-// 				return (NULL);
-// 			i = 0;
-// 			j = 0;
-// 			while (env->value[i++])
-// 			{
-// 				if (i > (int)len)
-// 					oldpwd[j++] = env->value[i];
-// 			}
-// 			oldpwd[j] = '\0';
-// 			return (oldpwd);
-// 		}
-// 		env = env->next;
-// 	}
-// 	return (NULL);
-// }
+int	go_to_path(t_envs *ls_envs, char *var)
+{
+	char	*path;
+	char	*msg;
+	int		ret;
 
-// static int		update_oldpwd(t_env *env)
-// {
-// 	char	cwd[PATH_MAX];
-// 	char	*oldpwd;
+	ret = 0;
+	path = get_env_var(ls_envs, var);
+	ret = chdir(path);
+	msg = ft_substr(var, 0, ft_strlen(var) - 1);
+	if (ret)
+	{
+		ft_putendl_fd("minishell : cd: ",
+			STDERR_FILENO);
+		ft_putendl_fd(msg, STDERR_FILENO);
+		ft_putendl_fd(" not set", STDERR_FILENO);
+		free(msg);
+	}
+	return (ret);
+}
 
-// 	if (getcwd(cwd, PATH_MAX) == NULL)
-// 		return (ERROR);
-// 	if (!(oldpwd = ft_strjoin("OLDPWD=", cwd)))
-// 		return (ERROR);
-// 	if (is_in_env(env, oldpwd) == 0)
-// 		env_add(oldpwd, env);
-// 	ft_memdel(oldpwd);
-// 	return (SUCCESS);
-// }
+int	ch_dir(char *cmds)
+{
+	int	ret;
 
-// static int		go_to_path(int option, t_env *env)
-// {
-// 	int		ret;
-// 	char	*env_path;
+	ret = chdir(cmds);
+	if (ret)
+	{
+		ft_putendl_fd("minishell : cd: ",
+			STDERR_FILENO);
+		ft_putendl_fd("no such file or directory: ",
+			STDERR_FILENO);
+		ft_putendl_fd(cmds, STDERR_FILENO);
+		ft_putendl_fd(" not set", STDERR_FILENO);
+	}
+	return (ret);
+}
 
-// 	env_path = NULL;
-// 	if (option == 0)
-// 	{
-// 		update_oldpwd(env);
-// 		env_path = get_env_path(env, "HOME", 4);
-// 		if (!env_path)
-// 			ft_putendl_fd("minishell : cd: HOME not set", STDERR);
-// 		if (!env_path)
-// 			return (ERROR);
-// 	}
-// 	else if (option == 1)
-// 	{
-// 		env_path = get_env_path(env, "OLDPWD", 6);
-// 		if (!env_path)
-// 			ft_putendl_fd("minishell : cd: OLDPWD not set", STDERR);
-// 		if (!env_path)
-// 			return (ERROR);
-// 		update_oldpwd(env);
-// 	}
-// 	ret = chdir(env_path);
-// 	ft_memdel(env_path);
-// 	return (ret);
-// }
+int	update_pwd(t_envs *ls_envs)
+{
+	char	cwd[PATH_MAX];
+	char	*new_pwd;
 
-// int				ft_cd(char **args, t_env *env)
-// {
-// 	int		cd_ret;
+	if (!getcwd(cwd, PATH_MAX))
+		return (EXIT_FAILURE);
+	new_pwd = ft_strdup(cwd);
+	if (!new_pwd)
+		ft_error("Failed to updated pwd");
+	free(ls_envs->old_pwd);
+	ls_envs->old_pwd = ls_envs->pwd;
+	ls_envs->pwd = new_pwd;
+	return (EXIT_SUCCESS);
+}
 
-// 	if (!args[1])
-// 		return (go_to_path(0, env));
-// 	if (ft_strcmp(args[1], "-") == 0)
-// 		cd_ret = go_to_path(1, env);
-// 	else
-// 	{
-// 		update_oldpwd(env);
-// 		cd_ret = chdir(args[1]);
-// 		if (cd_ret < 0)
-// 			cd_ret *= -1;
-// 		if (cd_ret != 0)
-// 			print_error(args);
-// 	}
-// 	return (cd_ret);
-// }
+int	ft_cd(char **cmds, t_envs *ls_envs)
+{
+	int		ret;
+
+	ret = 0;
+	if (!cmds[1])
+		ret = go_to_path(ls_envs, "HOME=");
+	else if (!ft_strncmp(cmds[1], "-", 1))
+		ret = go_to_path(ls_envs, "OLDPWD=");
+	else
+		ret = ch_dir(cmds[1]);
+	if (ret)
+		return (EXIT_FAILURE);
+	if (update_pwd(ls_envs))
+		ft_error("cd : Failed to updated env");
+	if (update_env(ls_envs))
+		ft_error("cd : Failed to updated env");
+	return (EXIT_SUCCESS);
+}

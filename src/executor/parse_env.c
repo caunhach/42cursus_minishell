@@ -68,7 +68,7 @@ int	parse_env(t_envs **ls_envs, char **env)
 	while ((*ls_envs)->path[++i])
 	{
 		if (ft_strncmp(&(*ls_envs)->path[i]
-			[ft_strlen((*ls_envs)->path[i]) - 1], "/", 1) != 0)
+				[ft_strlen((*ls_envs)->path[i]) - 1], "/", 1) != 0)
 		{
 			tmp = ft_strjoin((*ls_envs)->path[i], "/");
 			free((*ls_envs)->path[i]);
@@ -96,7 +96,7 @@ int	update_dir(t_envs *ls_envs, char *new_pwd)
 		ls_envs->old_pwd = ft_strdup(ls_envs->pwd);
 		free(ls_envs->pwd);
 		ls_envs->pwd = ft_strdup(new_pwd);
-		if(update_env(ls_envs))
+		if (update_env(ls_envs))
 			ft_error("Failed to updated pwd in env");
 	}
 	return (0);

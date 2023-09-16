@@ -15,7 +15,7 @@
 void	print_env(t_envs *ls_envs)
 {
 	print_array(ls_envs->envs, "envs");
-	print_array(ls_envs->path, "path");
+	// print_array(ls_envs->path, "path");
 }
 
 int	update_env(t_envs *ls_envs)
@@ -23,7 +23,7 @@ int	update_env(t_envs *ls_envs)
 	int	i;
 
 	i = -1;
-	while(ls_envs->envs[++i])
+	while (ls_envs->envs[++i])
 	{
 		if (!ft_strncmp(ls_envs->envs[i], "PWD=", 4))
 		{

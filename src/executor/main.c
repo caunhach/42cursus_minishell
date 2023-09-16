@@ -12,14 +12,14 @@
 
 #include "../../inc/execution.h"
 
-int		cmds_first(t_cmds **ls_cmds)
+int	cmds_first(t_cmds **ls_cmds)
 {
 	while (*ls_cmds && (*ls_cmds)->previous)
 		*ls_cmds = (*ls_cmds)->previous;
 	return (EXIT_SUCCESS);
 }
 
-int		cmds_add(t_cmds *ls_cmds, char *args)
+int	cmds_add(t_cmds *ls_cmds, char *args)
 {
 	char	**tmp;
 	int		i;
@@ -39,7 +39,7 @@ int		cmds_add(t_cmds *ls_cmds, char *args)
 	return (EXIT_SUCCESS);
 }
 
-int		cmds_push(t_cmds **ls_cmds, char *args, t_envs *env)
+int	cmds_push(t_cmds **ls_cmds, char *args, t_envs *env)
 {
 	t_cmds	*new;
 
@@ -69,7 +69,7 @@ int	parse_arg(t_cmds **ls_cmds, char *args, t_envs *env)
 		(*ls_cmds)->types = type_pipe;
 	else
 		return (cmds_add(*ls_cmds, args));
-	return(EXIT_SUCCESS);
+	return (EXIT_SUCCESS);
 }
 
 int	main(int argc, char **argv, char **env)
@@ -88,10 +88,14 @@ int	main(int argc, char **argv, char **env)
 	while (i < argc)
 		parse_arg(&ls_cmds, argv[i++], ls_envs);
 	cmds_first(&ls_cmds);
-	print_cmds(ls_cmds);
+	// print_cmds(ls_cmds);
 	// print_env(ls_envs);
 	// print_pwd(ls_envs);
-	if (ls_cmds)
+	if (ls_cmds->next == NULL)
+		single_execution(ls_cmds);
+	else
 		execution(ls_cmds);
+	// print_env(ls_envs);
+	// print_pwd(ls_envs);
 	return (ret);
 }

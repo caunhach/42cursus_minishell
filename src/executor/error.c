@@ -26,3 +26,16 @@ int	cmd_not_found(char *str)
 	ft_putstr_fd(": command not found\n", STDERR_FILENO);
 	return (127);
 }
+
+int	export_error(char *c)
+{
+	ft_putstr_fd("minishell: export: ", STDERR_FILENO);
+	if (c)
+	{
+		ft_putchar_fd('\'', STDERR_FILENO);
+		ft_putstr_fd(c, STDERR_FILENO);
+		ft_putstr_fd("\': is ", STDERR_FILENO);
+	}
+	ft_putendl_fd("not a valid identifier", STDERR_FILENO);
+	return (EXIT_FAILURE);
+}

@@ -17,7 +17,7 @@ void	pre_exec_cmd(t_cmds *ls_cmds)
 	int	exit_status;
 
 	exit_status = EXIT_SUCCESS;
-	if (ls_cmds && is_builtin(ls_cmds->cmds[0]))
+	if (is_builtin(ls_cmds->cmds[0]))
 		exit_status = exec_builtin(ls_cmds);
 	else if (ls_cmds->cmds[0][0] != '\0')
 		exit_status = exec_cmd(ls_cmds);
@@ -26,11 +26,9 @@ void	pre_exec_cmd(t_cmds *ls_cmds)
 
 int	parent_fork(t_cmds *ls_cmds, int *fd_in)
 {
+	close(ls_cmds->pipes[1]);
 	if (ls_cmds->next)
-	{
-		close(ls_cmds->pipes[1]);
 		*fd_in = ls_cmds->pipes[0];
-	}
 	return (EXIT_SUCCESS);
 }
 
@@ -38,10 +36,8 @@ int	child_fork(t_cmds *ls_cmds, int fd_in)
 {
 	if (ls_cmds->previous && dup2(fd_in, STDIN_FILENO) < 0)
 		ft_error("Failed to dup2\n");
-	close(ls_cmds->pipes[0]);
 	if (ls_cmds->next && dup2(ls_cmds->pipes[1], STDOUT_FILENO) < 0)
 		ft_error("Failed to dup2\n");
-	close(ls_cmds->pipes[1]);
 	if (ls_cmds->previous)
 		close(fd_in);
 	pre_exec_cmd(ls_cmds);
@@ -61,11 +57,14 @@ int	ft_fork(t_cmds *ls_cmds, int *fd_in)
 	if (ls_cmds->pid < 0)
 		ft_error("Failed to fork\n");
 	else if (ls_cmds->pid == 0)
+	{
 		child_fork(ls_cmds, *fd_in);
+	}
 	else
 	{
 		waitpid(ls_cmds->pid, &status, 0);
 		parent_fork(ls_cmds, fd_in);
+		// ft_printf("done bot child and parent\n");
 	}
 	return (EXIT_SUCCESS);
 }
@@ -76,10 +75,13 @@ int	execution(t_cmds *ls_cmds)
 
 	// fd_in = open("mini_a.txt", O_RDONLY);
 	fd_in = STDIN_FILENO;
-	while(ls_cmds)
+	if (ls_cmds->next != NULL)
 	{
-		ft_fork(ls_cmds, &fd_in);
-		ls_cmds = ls_cmds->next;
+		while (ls_cmds)
+		{
+			ft_fork(ls_cmds, &fd_in);
+			ls_cmds = ls_cmds->next;
+		}
 	}
 	return (EXIT_SUCCESS);
 }

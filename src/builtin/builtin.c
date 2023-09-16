@@ -12,13 +12,26 @@
 
 #include "../../inc/execution.h"
 
+int	is_builtin2(char *cmd)
+{
+	if (!ft_strncmp(cmd, "cd", 2))
+		return (1);
+	else if (!ft_strncmp(cmd, "export", 6))
+		return (1);
+	return (0);
+}
+
 int	is_builtin(char *cmd)
 {
 	if (!ft_strncmp(cmd, "echo", 4))
 		return (1);
-	// else if (!ft_strncmp(cmd, "cd", 2))
-	// 	return (1);
 	else if (!ft_strncmp(cmd, "pwd", 3))
+		return (1);
+	else if (!ft_strncmp(cmd, "cd", 2))
+		return (1);
+	else if (!ft_strncmp(cmd, "env", 3))
+		return (1);
+	else if (!ft_strncmp(cmd, "export", 6))
 		return (1);
 	return (0);
 }
@@ -30,9 +43,14 @@ int	exec_builtin(t_cmds *ls_cmds)
 	exit_status = 0;
 	if (!ft_strncmp(ls_cmds->cmds[0], "echo", 4))
 		exit_status = ft_echo(ls_cmds);
-	// else if (!ft_strncmp(ls_cmds->cmds[0], "cd", 2))
-	// 	exit_status = ft_cd(ls_cmds);
 	else if (!ft_strncmp(ls_cmds->cmds[0], "pwd", 3))
 		exit_status = ft_pwd(ls_cmds->ls_envs);
+	else if (!ft_strncmp(ls_cmds->cmds[0], "cd", 2))
+		exit_status = ft_cd(ls_cmds->cmds, ls_cmds->ls_envs);
+	else if (!ft_strncmp(ls_cmds->cmds[0], "env", 3))
+		exit_status = ft_env(ls_cmds->ls_envs);
+	else if (!ft_strncmp(ls_cmds->cmds[0], "export", 6))
+		exit_status = ft_export(ls_cmds, ls_cmds->ls_envs);
+	// print_pwd(ls_cmds->ls_envs);
 	return (exit_status);
 }
