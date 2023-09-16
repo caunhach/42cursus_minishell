@@ -18,6 +18,7 @@
 # include <stdlib.h>
 # include <sys/uio.h>
 # include <sys/types.h>
+# include <sys/wait.h>
 # include <limits.h>
 # include "../lib/libft/inc/libft.h"
 
