@@ -20,13 +20,26 @@
 # include <sys/types.h>
 # include <sys/wait.h>
 # include <limits.h>
+# include <readline/readline.h>
+# include <readline/history.h>
 # include "../lib/libft/inc/libft.h"
 
 typedef enum s_types
 {
-	type_pipe,
-	type_end,
+	PIPE = 1,
+	LESS = 2,
+	LESS_LESS = 3,
+	GREAT = 4,
+	GREAT_GREAT = 5,
 }	t_types;
+
+typedef struct s_lexers
+{
+	char			*str;
+	t_types			types;
+	struct s_lexers	*previous;
+	struct s_lexers	*next;
+}	t_lexers;
 
 typedef struct s_envs
 {
@@ -39,10 +52,11 @@ typedef struct s_envs
 typedef struct s_cmds
 {
 	char			**cmds;
+	char			*hd_filename;
 	int				len_cmd;
 	int				pipes[2];
 	pid_t			pid;
-	t_types			types;
+	t_lexers		*ls_lexers;
 	t_envs			*ls_envs;
 	struct s_cmds	*previous;
 	struct s_cmds	*next;
@@ -83,6 +97,11 @@ int		ft_export(t_cmds *ls_cmds, t_envs *ls_envs);
 int		ft_pwd(t_envs *ls_envs);
 
 /* executor */
+/* free.c */
+void	free_lexers(t_lexers *ls_lexers);
+void	free_envs(t_envs *ls_envs);
+void	free_all(t_cmds *ls_cmds);
+
 /* main.c */
 int		parse_arg(t_cmds **ls_cmds, char *args, t_envs *env);
 int		cmds_push(t_cmds **ls_cmds, char *args, t_envs *env);
@@ -129,5 +148,13 @@ int		update_env(t_envs *ls_envs);
 /* expander */
 /* expander_utils.c */
 char	*delete_quotes(char *str, char c);
+
+/* lexer */
+/* utils_lexer.c */
+int		is_redirect(char *args);
+int		lexers_add(t_lexers *ls_lexers, char *args);
+int		lexers_push(t_cmds *ls_cmds, char *args);
+int		is_pipe(t_lexers *ls_lexers);
+int		lexer_first(t_cmds *ls_cmds);
 
 #endif

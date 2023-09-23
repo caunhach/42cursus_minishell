@@ -40,12 +40,20 @@ void	print_cmds(t_cmds *ls_cmds)
 		ft_printf("cmds %d :", i++);
 		j = -1;
 		while (ls_cmds->cmds[++j])
-			ft_printf(" %s", ls_cmds->cmds[j]);
-		ft_printf("\ntypes of cmds %d : ", i - 1);
-		if (ls_cmds->types == type_pipe)
-			ft_printf("PIPE\n");
-		else if (ls_cmds->types == type_end)
-			ft_printf("END\n");
+			ft_printf(" %s ", ls_cmds->cmds[j]);
+		ft_printf("\n");
+		if (ls_cmds->ls_lexers)
+		{
+			while (ls_cmds->ls_lexers->next)
+			{
+				ft_printf("str : %s\n", ls_cmds->ls_lexers->str);
+				ft_printf("types : %d\n", ls_cmds->ls_lexers->types);
+				ls_cmds->ls_lexers = ls_cmds->ls_lexers->next;
+			}
+			ft_printf("str : %s\n", ls_cmds->ls_lexers->str);
+			ft_printf("types : %d\n", ls_cmds->ls_lexers->types);
+			lexer_first(ls_cmds);
+		}
 		ls_cmds = ls_cmds->next;
 	}
 }

@@ -16,6 +16,7 @@ SRCS = src/executor/error.c \
        src/executor/exec_cmd.c \
 	   src/executor/exec_main.c \
 	   src/executor/exec_single_main.c \
+	   src/executor/free.c \
 	   src/executor/main.c \
 	   src/executor/utils.c \
 	   src/executor/parse_env.c \
@@ -27,7 +28,8 @@ SRCS = src/executor/error.c \
 	   src/builtin/ft_export.c \
 	   src/builtin/ft_pwd.c \
 	   src/builtin/builtin_utils.c \
-	   src/expander/expander_utils.c
+	   src/expander/expander_utils.c \
+	   src/lexer/utils_lexer.c
 
 OBJS = $(SRCS:.c=.o)
 
@@ -39,7 +41,7 @@ CFLAGS = -Wall -Wextra -Werror
 
 $(NAME) : $(OBJS)
 	@make -C $(LIBFT) all
-	@gcc $(CFLAGS) $(OBJS) $(LIBFT_PATH) -o $(NAME)
+	@gcc $(CFLAGS) $(OBJS) $(LIBFT_PATH) -lreadline -o $(NAME)
 
 all: $(NAME)
 

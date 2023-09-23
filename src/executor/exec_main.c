@@ -26,7 +26,8 @@ void	pre_exec_cmd(t_cmds *ls_cmds)
 
 int	parent_fork(t_cmds *ls_cmds, int *fd_in)
 {
-	close(ls_cmds->pipes[1]);
+	if (ls_cmds->next)
+		close(ls_cmds->pipes[1]);
 	if (ls_cmds->next)
 		*fd_in = ls_cmds->pipes[0];
 	return (EXIT_SUCCESS);
