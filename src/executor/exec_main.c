@@ -49,11 +49,6 @@ int	ft_fork(t_cmds *ls_cmds, int *fd_in)
 {
 	int		status;
 
-	if (ls_cmds->next)
-	{
-		if (pipe(ls_cmds->pipes) < 0)
-			ft_error("Failed to pipe\n");
-	}
 	ls_cmds->pid = fork();
 	if (ls_cmds->pid < 0)
 		ft_error("Failed to fork\n");
@@ -74,12 +69,16 @@ int	execution(t_cmds *ls_cmds)
 {
 	int		fd_in;
 
-	// fd_in = open("mini_a.txt", O_RDONLY);
 	fd_in = STDIN_FILENO;
 	if (ls_cmds->next != NULL)
 	{
 		while (ls_cmds)
 		{
+			if (ls_cmds->next)
+			{
+				if (pipe(ls_cmds->pipes) < 0)
+					ft_error("Failed to pipe\n");
+			}
 			ft_fork(ls_cmds, &fd_in);
 			ls_cmds = ls_cmds->next;
 		}

@@ -93,7 +93,7 @@ int		is_in_env(t_cmds *ls_cmds);
 char	**loop_add_env(char **arr, char **rtn, char *str);
 int		ft_export(t_cmds *ls_cmds, t_envs *ls_envs);
 
-/* ft_pwd.c*/
+/* ft_pwd.c */
 int		ft_pwd(t_envs *ls_envs);
 
 /* executor */
@@ -101,6 +101,11 @@ int		ft_pwd(t_envs *ls_envs);
 void	free_lexers(t_lexers *ls_lexers);
 void	free_envs(t_envs *ls_envs);
 void	free_all(t_cmds *ls_cmds);
+
+/* heredoc.c */
+int		ft_heredoc(t_cmds *ls_cmds, t_lexers *heredoc, char *file_name);
+char	*generate_hd_filename(void);
+int		heredoc_main(t_cmds *ls_cmds, t_lexers *ls_lexers);
 
 /* main.c */
 int		parse_arg(t_cmds **ls_cmds, char *args, t_envs *env);
