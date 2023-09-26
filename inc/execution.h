@@ -96,6 +96,13 @@ int		ft_export(t_cmds *ls_cmds, t_envs *ls_envs);
 /* ft_pwd.c */
 int		ft_pwd(t_envs *ls_envs);
 
+/* ft_unset.c */
+char	**loop_del_var(char **envs, char **rtn, char *var);
+char	**del_var(char **envs, char *var);
+int		check_unset_cmds(char *cmd);
+int		check_unset(char **cmds);
+int		ft_unset(t_cmds *ls_cmds);
+
 /* executor */
 /* redirect.c */
 int		redirect_input(t_cmds *ls_cmds);
@@ -124,6 +131,9 @@ int		cmds_first(t_cmds **ls_cmds);
 int		exit_fatal(void);
 int		cmd_not_found(char *str);
 int		export_error(char *c);
+
+/* exec_expand.c */
+int		expand_cmd_and_lexers(t_cmds *ls_cmds);
 
 /* exec_main.c */
 void	pre_exec_cmd(t_cmds *ls_cmds);
@@ -159,7 +169,14 @@ int		update_env(t_envs *ls_envs);
 
 /* expander */
 /* expander_utils.c */
+char	*char_to_str(char c);
+size_t	dollar_sign(char *str);
 char	*delete_quotes(char *str, char c);
+/* expander.c */
+int		handle_digit_after_dollar(int j, char *str);
+char	*expand_variable(t_cmds *ls_cmds, char *str);
+char	**expander_arr(t_cmds *ls_cmds, char **arr);
+char	*expander_str(t_cmds *ls_cmds, char *str);
 
 /* lexer */
 /* utils_lexer.c */

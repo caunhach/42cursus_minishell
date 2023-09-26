@@ -77,6 +77,7 @@ int	execution(t_cmds *ls_cmds)
 	{
 		while (ls_cmds)
 		{
+			expand_cmd_and_lexers(ls_cmds);
 			if (ls_cmds->next)
 			{
 				if (pipe(ls_cmds->pipes) < 0)

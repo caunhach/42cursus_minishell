@@ -1,36 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exec_single_main.c                                 :+:      :+:    :+:   */
+/*   exec_expand.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: caunhach <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/09/16 14:03:11 by caunhach          #+#    #+#             */
-/*   Updated: 2023/09/16 14:03:12 by caunhach         ###   ########.fr       */
+/*   Created: 2023/09/26 23:19:27 by caunhach          #+#    #+#             */
+/*   Updated: 2023/09/26 23:19:30 by caunhach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/execution.h"
 
-int	single_execution(t_cmds *ls_cmds)
+int	expand_cmd_and_lexers(t_cmds *ls_cmds)
 {
-	int	pid;
-	int	status;
-	int	exit_status;
+	t_lexers	*start;
 
-	exit_status = EXIT_SUCCESS;
-	expand_cmd_and_lexers(ls_cmds);
-	if (is_builtin2(ls_cmds->cmds[0]))
+	start = ls_cmds->ls_lexers;
+	ls_cmds->cmds = expander_arr(ls_cmds, ls_cmds->cmds);
+	while (ls_cmds->ls_lexers)
 	{
-		exit_status = exec_builtin(ls_cmds);
-		return (exit_status);
+		if (ls_cmds->ls_lexers->types != LESS_LESS)
+			ls_cmds->ls_lexers->str
+				= expander_str(ls_cmds, ls_cmds->ls_lexers->str);
+		ls_cmds->ls_lexers = ls_cmds->ls_lexers->next;
 	}
-	heredoc_main(ls_cmds, ls_cmds->ls_lexers);
-	pid = fork();
-	if (pid < 0)
-		ft_error("Failed to fork\n");
-	else if (pid == 0)
-		pre_exec_cmd(ls_cmds);
-	waitpid(pid, &status, 0);
-	return (exit_status);
+	ls_cmds->ls_lexers = start;
+	return (EXIT_SUCCESS);
 }

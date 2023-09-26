@@ -14,6 +14,7 @@ NAME = minishell
 
 SRCS = src/executor/error.c \
        src/executor/exec_cmd.c \
+	   src/executor/exec_expand.c \
 	   src/executor/exec_main.c \
 	   src/executor/exec_single_main.c \
 	   src/executor/free.c \
@@ -29,8 +30,10 @@ SRCS = src/executor/error.c \
 	   src/builtin/ft_env.c \
 	   src/builtin/ft_export.c \
 	   src/builtin/ft_pwd.c \
+	   src/builtin/ft_unset.c \
 	   src/builtin/builtin_utils.c \
 	   src/expander/expander_utils.c \
+	   src/expander/expander.c \
 	   src/lexer/utils_lexer.c
 
 OBJS = $(SRCS:.c=.o)

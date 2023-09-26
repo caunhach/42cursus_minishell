@@ -18,6 +18,8 @@ int	is_builtin2(char *cmd)
 		return (1);
 	else if (!ft_strncmp(cmd, "export", 6))
 		return (1);
+	else if (!ft_strncmp(cmd, "unset", 5))
+		return (1);
 	return (0);
 }
 
@@ -32,6 +34,8 @@ int	is_builtin(char *cmd)
 	else if (!ft_strncmp(cmd, "env", 3))
 		return (1);
 	else if (!ft_strncmp(cmd, "export", 6))
+		return (1);
+	else if (!ft_strncmp(cmd, "unset", 5))
 		return (1);
 	return (0);
 }
@@ -51,6 +55,8 @@ int	exec_builtin(t_cmds *ls_cmds)
 		exit_status = ft_env(ls_cmds->ls_envs);
 	else if (!ft_strncmp(ls_cmds->cmds[0], "export", 6))
 		exit_status = ft_export(ls_cmds, ls_cmds->ls_envs);
+	else if (!ft_strncmp(ls_cmds->cmds[0], "unset", 5))
+		exit_status = ft_unset(ls_cmds);
 	// print_pwd(ls_cmds->ls_envs);
 	return (exit_status);
 }
