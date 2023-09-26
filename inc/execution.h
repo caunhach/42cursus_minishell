@@ -103,6 +103,7 @@ void	free_envs(t_envs *ls_envs);
 void	free_all(t_cmds *ls_cmds);
 
 /* heredoc.c */
+int		exec_heredoc(t_cmds *ls_cmds, char *filename);
 int		ft_heredoc(t_cmds *ls_cmds, t_lexers *heredoc, char *file_name);
 char	*generate_hd_filename(void);
 int		heredoc_main(t_cmds *ls_cmds, t_lexers *ls_lexers);

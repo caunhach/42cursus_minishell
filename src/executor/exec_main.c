@@ -79,6 +79,7 @@ int	execution(t_cmds *ls_cmds)
 				if (pipe(ls_cmds->pipes) < 0)
 					ft_error("Failed to pipe\n");
 			}
+			heredoc_main(ls_cmds, ls_cmds->ls_lexers);
 			ft_fork(ls_cmds, &fd_in);
 			ls_cmds = ls_cmds->next;
 		}

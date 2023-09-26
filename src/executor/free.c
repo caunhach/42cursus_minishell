@@ -52,6 +52,8 @@ void	free_all(t_cmds *ls_cmds)
 	while (ls_cmds)
 	{
 		tmp = ls_cmds;
+		if (ls_cmds->hd_filename)
+			free(ls_cmds->hd_filename);
 		if (ls_cmds->cmds)
 			free_array(ls_cmds->cmds);
 		if (ls_cmds->ls_lexers != NULL)
