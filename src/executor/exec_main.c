@@ -17,6 +17,9 @@ void	pre_exec_cmd(t_cmds *ls_cmds)
 	int	exit_status;
 
 	exit_status = EXIT_SUCCESS;
+	if (ls_cmds->ls_lexers)
+		if (check_redirect(ls_cmds))
+			exit(1);
 	if (is_builtin(ls_cmds->cmds[0]))
 		exit_status = exec_builtin(ls_cmds);
 	else if (ls_cmds->cmds[0][0] != '\0')

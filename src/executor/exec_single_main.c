@@ -24,6 +24,7 @@ int	single_execution(t_cmds *ls_cmds)
 		exit_status = exec_builtin(ls_cmds);
 		return (exit_status);
 	}
+	heredoc_main(ls_cmds, ls_cmds->ls_lexers);
 	pid = fork();
 	if (pid < 0)
 		ft_error("Failed to fork\n");

@@ -59,6 +59,8 @@ int	cmds_push(t_cmds **ls_cmds, char *args, t_envs *env)
 		new->previous = *ls_cmds;
 	}
 	*ls_cmds = new;
+	if (is_redirect(args))
+		return (lexers_push(*ls_cmds, args));
 	return (cmds_add(new, args));
 }
 
@@ -96,7 +98,6 @@ int	main(int argc, char **argv, char **env)
 	i = 1;
 	while (i < argc)
 		parse_arg(&ls_cmds, argv[i++], ls_envs);
-	// lexer_first(&ls_cmds->ls_lexers);
 	cmds_first(&ls_cmds);
 	// print_cmds(ls_cmds);
 	// print_env(ls_envs);

@@ -22,6 +22,7 @@ SRCS = src/executor/error.c \
 	   src/executor/parse_env.c \
 	   src/executor/utils_env.c \
 	   src/executor/heredoc.c \
+	   src/executor/redirect.c \
 	   src/builtin/builtin.c \
 	   src/builtin/ft_cd.c \
 	   src/builtin/ft_echo.c \

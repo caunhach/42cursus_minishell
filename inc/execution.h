@@ -97,6 +97,12 @@ int		ft_export(t_cmds *ls_cmds, t_envs *ls_envs);
 int		ft_pwd(t_envs *ls_envs);
 
 /* executor */
+/* redirect.c */
+int		redirect_input(t_cmds *ls_cmds);
+int		check_append_outfile(t_lexers *ls_lexers);
+int		redirect_output(t_lexers *ls_lexers);
+int		check_redirect(t_cmds *ls_cmds);
+
 /* free.c */
 void	free_lexers(t_lexers *ls_lexers);
 void	free_envs(t_envs *ls_envs);
