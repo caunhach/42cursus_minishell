@@ -12,6 +12,11 @@
 
 #include "../../inc/execution.h"
 
+int		loop_for_dollar_sign(t_cmds *ls_cmds, char *str, char **tmp)
+{
+
+}
+
 int		handle_digit_after_dollar(int j, char *str)
 {
 	int	i;
@@ -38,11 +43,17 @@ char	*expand_variable(t_cmds *ls_cmds, char *str)
 	while (str[i])
 	{
 		i += handle_digit_after_dollar(i, str);
-		tmp2 = char_to_str(str[i++]);
-		tmp3 = ft_strjoin(tmp, tmp2);
-		free(tmp);
-		free(tmp2);
-		tmp = tmp3;
+		if (str[i] == '$' && str[i + 1] != ' ' $$ (str[i + 1] != '"'
+			|| str[i + 2]) && str[i + 1])
+			i += loop_for_dollar_sign(ls_cmds, str, &tmp, i);
+		else
+		{
+			tmp2 = char_to_str(str[i++]);
+			tmp3 = ft_strjoin(tmp, tmp2);
+			free(tmp);
+			free(tmp2);
+			tmp = tmp3;
+		}
 	}
 	ls_cmds = ls_cmds->next;
 	return (tmp);
