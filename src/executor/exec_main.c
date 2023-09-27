@@ -30,9 +30,16 @@ void	pre_exec_cmd(t_cmds *ls_cmds)
 int	parent_fork(t_cmds *ls_cmds, int *fd_in)
 {
 	if (ls_cmds->next)
+	{
 		close(ls_cmds->pipes[1]);
-	if (ls_cmds->next)
-		*fd_in = ls_cmds->pipes[0];
+		if (ls_cmds->hd_filename)
+		{
+			close(ls_cmds->pipes[0]);
+			*fd_in = open(ls_cmds->hd_filename, O_RDONLY);
+		}
+		else
+			*fd_in = ls_cmds->pipes[0];
+	}
 	return (EXIT_SUCCESS);
 }
 
