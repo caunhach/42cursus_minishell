@@ -80,7 +80,7 @@ int	check_redirect(t_cmds *ls_cmds)
 	while (ls_cmds->ls_lexers)
 	{
 		if (ls_cmds->ls_lexers->types == LESS
-			|| ls_cmds->ls_lexers-> types == LESS_LESS)
+			|| ls_cmds->ls_lexers->types == LESS_LESS)
 		{
 			if (redirect_input(ls_cmds))
 				return (EXIT_FAILURE);

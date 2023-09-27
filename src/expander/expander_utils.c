@@ -22,6 +22,16 @@ char	*char_to_str(char c)
 	return (str);
 }
 
+int	len_no_specific(char *str, int i)
+{
+	i++;
+	while (str[i] && str[i] != '$' && str[i] != ' '
+		&& str[i] != '\"' && str[i] != '\'' && str[i] != '='
+		&& str[i] != '-' && str[i] != ':')
+		i++;
+	return (i);
+}
+
 size_t	dollar_sign(char *str)
 {
 	size_t	i;

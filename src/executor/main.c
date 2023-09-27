@@ -108,7 +108,7 @@ int	main(int argc, char **argv, char **env)
 		execution(ls_cmds);
 	// print_env(ls_envs);
 	// print_pwd(ls_envs);
-	// if (ls_cmds)
-	free_all(ls_cmds);
+	if (ls_cmds)
+		free_all(ls_cmds);
 	return (ret);
 }

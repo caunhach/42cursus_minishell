@@ -52,6 +52,7 @@ int	lexers_push(t_cmds *ls_cmds, char *args)
 		new->types = GREAT_GREAT;
 	else if (!ft_strncmp(args, "|", ft_strlen(args)))
 		new->types = PIPE;
+	// ft_printf("args : %s type : %d\n", args, new->types);
 	new->previous = NULL;
 	new->next = NULL;
 	if (ls_cmds->ls_lexers)

@@ -170,9 +170,11 @@ int		update_env(t_envs *ls_envs);
 /* expander */
 /* expander_utils.c */
 char	*char_to_str(char c);
+int		len_no_specific(char *str, int i);
 size_t	dollar_sign(char *str);
 char	*delete_quotes(char *str, char c);
 /* expander.c */
+int		loop_for_dollar_sign(t_cmds *ls_cmds, char *str, char **tmp, int i);
 int		handle_digit_after_dollar(int j, char *str);
 char	*expand_variable(t_cmds *ls_cmds, char *str);
 char	**expander_arr(t_cmds *ls_cmds, char **arr);

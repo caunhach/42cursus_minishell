@@ -20,11 +20,12 @@ int	expand_cmd_and_lexers(t_cmds *ls_cmds)
 	ls_cmds->cmds = expander_arr(ls_cmds, ls_cmds->cmds);
 	while (ls_cmds->ls_lexers)
 	{
-		if (ls_cmds->ls_lexers->types != LESS_LESS)
+		if (ls_cmds->ls_lexers->types != LESS_LESS && ls_cmds->ls_lexers->str)
 			ls_cmds->ls_lexers->str
 				= expander_str(ls_cmds, ls_cmds->ls_lexers->str);
 		ls_cmds->ls_lexers = ls_cmds->ls_lexers->next;
 	}
 	ls_cmds->ls_lexers = start;
+	// ft_printf("done");
 	return (EXIT_SUCCESS);
 }

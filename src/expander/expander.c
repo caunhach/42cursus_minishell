@@ -12,9 +12,35 @@
 
 #include "../../inc/execution.h"
 
-int		loop_for_dollar_sign(t_cmds *ls_cmds, char *str, char **tmp)
+int		loop_for_dollar_sign(t_cmds *ls_cmds, char *str, char **tmp, int i)
 {
-
+	int		j;
+	char	**envs;
+	char	*tmp2;
+	char	*tmp3;
+	int		ret;
+	
+	j = 0;
+	ret = 0;
+	envs = ls_cmds->ls_envs->envs;
+	while (envs[j])
+	{
+		if (!ft_strncmp(str + i + 1, envs[j], equal_sign(envs[j]) - 1)
+			&& len_no_specific(str, i) - i == (int)equal_sign(envs[j]))
+		{
+			tmp2 = ft_strdup(envs[j] + equal_sign(envs[j]));
+			tmp3 = ft_strjoin(*tmp, tmp2);
+			free(*tmp);
+			*tmp = tmp3;
+			free(tmp2);
+			ret = equal_sign(envs[j]);
+		}
+		j++;
+	}
+	if (!ret)
+		ret = len_no_specific(str, i) - i;
+	ft_printf("done");
+	return (ret);
 }
 
 int		handle_digit_after_dollar(int j, char *str)
@@ -43,16 +69,16 @@ char	*expand_variable(t_cmds *ls_cmds, char *str)
 	while (str[i])
 	{
 		i += handle_digit_after_dollar(i, str);
-		if (str[i] == '$' && str[i + 1] != ' ' $$ (str[i + 1] != '"'
-			|| str[i + 2]) && str[i + 1])
+		if (str[i] == '$' && (str[i + 1] != ' ' && (str[i + 1] != '"'
+			|| str[i + 2])) && str[i + 1])
 			i += loop_for_dollar_sign(ls_cmds, str, &tmp, i);
 		else
 		{
 			tmp2 = char_to_str(str[i++]);
 			tmp3 = ft_strjoin(tmp, tmp2);
 			free(tmp);
-			free(tmp2);
 			tmp = tmp3;
+			free(tmp2);
 		}
 	}
 	ls_cmds = ls_cmds->next;
@@ -68,7 +94,7 @@ char	**expander_arr(t_cmds *ls_cmds, char **arr)
 	i = 0;
 	while (arr[i])
 	{
-		if (arr[i][dollar_sign(arr[i]) - 2] != '\'' && dollar_sign(arr[i])
+		if (dollar_sign(arr[i])
 			&& arr[i][dollar_sign(arr[i])])
 		{
 			tmp = expand_variable(ls_cmds, arr[i]);
@@ -80,6 +106,7 @@ char	**expander_arr(t_cmds *ls_cmds, char **arr)
 			arr[i] = delete_quotes(arr[i], '\"');
 			arr[i] = delete_quotes(arr[i], '\'');
 		}
+		// ft_printf("ls_cmd %d : %s len : %d\n", i, arr[i], ft_strlen(arr[i]));
 		i++;
 	}
 	return (arr);
@@ -90,7 +117,7 @@ char	*expander_str(t_cmds *ls_cmds, char *str)
 	char	*tmp;
 
 	tmp = NULL;
-	if (str[dollar_sign(str) - 2] != '\'' && dollar_sign(str)
+	if (dollar_sign(str)
 		&& str[dollar_sign(str)])
 	{
 		tmp = expand_variable(ls_cmds, str);
@@ -99,5 +126,6 @@ char	*expander_str(t_cmds *ls_cmds, char *str)
 	}
 	str = delete_quotes(str, '\"');
 	str = delete_quotes(str, '\'');
+	ft_printf("done");
 	return (str);
 }
